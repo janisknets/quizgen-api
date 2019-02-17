@@ -7,7 +7,7 @@ export const login = async (req, res) => {
   try {
     const reHashedPassword = SHA256(req.body.hashedPassword, process.env.SALT).toString()
     const user = await findUserByUsername(req.body.username)
-    if (!user || user.reHashedPassword.toString() !== reHashedPassword.toString()) {
+    if (!user || user.reHashedPassword !== reHashedPassword) {
       logger.error("No user or passwords didn't match")
       logger.error(`${user && user.reHashedPassword}`)
       logger.error(`${reHashedPassword}`)

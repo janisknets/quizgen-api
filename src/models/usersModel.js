@@ -3,12 +3,12 @@ import mongoose, { Schema } from 'mongoose'
 const { ObjectId } = Schema
 const UserSchema = new Schema({
   id: ObjectId,
-  username: { type: String, required: true },
+  username: { type: String, required: true, unique: true },
   email: { type: String, required: true },
   name: { type: String, required: true },
   surname: { type: String, required: true },
   dateOfBirth: {type: String, required: true},
-  reHashedPassword: {type: String, required: true, select: false},
+  reHashedPassword: {type: String, required: true},
   level: { type: String }
 }, {timestamp: true})
 
