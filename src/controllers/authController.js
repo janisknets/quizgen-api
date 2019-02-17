@@ -1,9 +1,7 @@
 import jwt from 'jsonwebtoken'
 import SHA256 from 'crypto-js/sha256'
 import { createUser, findUserByUsername } from 'models/usersModel'
-import log4js from 'log4js'
-const logger = log4js.getLogger();
-logger.level = 'debug';
+import logger from 'helpers/logger'
 
 export const login = async (req, res) => {
   try {
@@ -18,12 +16,18 @@ export const login = async (req, res) => {
     }
 
     logger.debug(`All Ok, user ${user.username} authenticated\n${user}`)
+    delete user.reHashedPassword
+    delete user.__v
     res.status(200).send({
-      token: jwt.sign(user, process.env.JWT_SECRET)
+      token: jwt.sign({ ...user }, process.env.JWT_SECRET)
     })
   } catch (error) {
     logger.error(error)
-    res.sendStatus(500)
+    res.status(500).send({
+      error: error.message,
+      user: user,
+      reHashedPassword: reHashedPassword
+    })
   }
 }
 

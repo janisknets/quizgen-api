@@ -8,7 +8,7 @@ const UserSchema = new Schema({
   name: { type: String, required: true },
   surname: { type: String, required: true },
   dateOfBirth: {type: String, required: true},
-  reHashedPassword: {type: String, required: true},
+  reHashedPassword: {type: String, required: true, select: false},
   level: { type: String }
 }, {timestamp: true})
 
@@ -19,7 +19,7 @@ const findUser = (userId) => UserModel.findOne({id: userId})
 const createUser = (payload) => new UserModel(payload).save()
 const updateUser = (userId, payload) => UserModel.updateOne({id: userId}, payload)
 const removeUser = (userId) => UserModel.remove({id: userId})
-const findUserByUsername = (username) => UserModel.findOne({username: username})
+const findUserByUsername = (username) => UserModel.findOne({username: username}).lean()
 
 export {
   findUser,

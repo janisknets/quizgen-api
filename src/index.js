@@ -12,6 +12,8 @@ import usersRouter from './routers/usersRouter'
 import authRouter from './routers/authRouter'
 import { authMiddleware } from './middleware/authentication'
 
+import logger from 'helpers/logger'
+
 
 dotenv.config()
 mongoose.connect(process.env.DBURL, { useNewUrlParser: true })
@@ -35,4 +37,4 @@ app.use('/users', authMiddleware, usersRouter);
 app.use('/auth', authRouter);
 app.use('/*', defaultRouter);
 
-app.listen(port, host, () => console.log(`Example app listening on port ${host}:${port}!`))
+app.listen(port, host, () => logger.info(`Example app listening on port ${host}:${port}!`))

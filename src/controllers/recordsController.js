@@ -1,4 +1,5 @@
 import { findRecords, createRecord, updateRecord, findRecord, removeRecord } from 'models/recordsModel.js'
+import logger from 'helpers/logger'
 
 export const getRecords = async (req, res) => {
   try {
@@ -14,7 +15,7 @@ export const getRecord = async (req, res) => {
     const record =  await findRecord(req.params.quizId)
     res.status(200).send(record)
   } catch (error) {
-    console.error(error)
+    logger.error(error)
     res.status(500).send(error.message)
   }
 }
@@ -24,7 +25,7 @@ export const patchRecord = async (req, res) => {
     const record = await updateRecord(req.params.quizId, req.body)
     res.status(200).send(record)
   } catch (error) {
-    console.error(error)
+    logger.error(error)
     res.status(500).send(new Error(error.message))
   }
 }
@@ -34,18 +35,18 @@ export const deleteRecord = async (req, res) => {
     const record = await removeRecord(req.params.quizId)
     res.status(200).send(record)
   } catch(error) {
-    console.error(error)
+    logger.error(error)
     res.status(500).send(new Error(error.message))
   }
 }
 
 export const postRecord = async (req, res) => {
   try {
-    console.log(req.body)
+    logger.log(req.body)
     const record = await createRecord(req.body)
     res.status(200).send(record)
   } catch (error) {
-    console.error(error)
+    logger.error(error)
     res.status(400).send(error.message)
   }
 }
