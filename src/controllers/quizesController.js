@@ -12,8 +12,12 @@ export const getQuizes = async (req, res) => {
 
 export const getQuiz = async (req, res) => {
   try {
-    const Quiz =  await findQuiz(req.params.quizId)
-    res.status(200).send(Quiz)
+    if (!req.params.quizId) {
+      throw new Error('Missing quizId')
+    }
+    const quiz =  await findQuiz(req.params.quizId)
+    logger.debug(quiz)
+    res.status(200).send(quiz)
   } catch (error) {
     logger.error(error)
     res.status(500).send(error.message)
@@ -22,8 +26,12 @@ export const getQuiz = async (req, res) => {
 
 export const patchQuiz = async (req, res) => {
   try {
-    const Quiz = await updateQuiz(req.params.quizId, req.body)
-    res.status(200).send(Quiz)
+    if (!req.params.quizId) {
+      throw new Error('Missing quizId')
+    }
+    await updateQuiz(req.params.quizId, req.body)
+    const quiz = await findQuiz(req.params.quizId)
+    res.status(200).send(quiz)
   } catch (error) {
     logger.error(error)
     res.status(500).send(new Error(error.message))
@@ -42,8 +50,13 @@ export const deleteQuiz = async (req, res) => {
 
 export const postQuiz = async (req, res) => {
   try {
-    logger.log(req.body)
-    const result = await createQuiz(req.body)
+    logger.debug(req.user, req.body)
+    const quiz = {
+      ownerId: req.user._id,
+      description: req.body.description,
+      name: req.body.name
+    }
+    const result = await createQuiz(quiz)
     res.status(200).send(result)
   } catch (error) {
     logger.error(error)
